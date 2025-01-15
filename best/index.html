@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        h1 {
+            color: #0078D4;
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: #0078D4;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #005A9E;
+        }
+
+        #text {
+            font-size: 16px;
+            margin: 20px 0;
+        }
+
+        input[type="range"] {
+            width: 60%;
+            margin: 10px 0;
+        }
+
+        #modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+            width: 300px;
+        }
+
+        #overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .error {
+            color: red;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        form h2 {
+            margin-bottom: 20px;
+            color: #0078D4;
+        }
+
+        label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+            text-align: left;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #0078D4;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        #dropdownMessage {
+            margin-top: 10px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Interactive Webpage</h1>
+
+    <!-- Button to Toggle Background -->
+    <button id="toggleButton">Toggle Background Color</button>
+
+    <!-- Slider with Real-Time Feedback -->
+    <div>
+        <p id="text">Adjust the size of this text using the slider below:</p>
+        <input type="range" id="slider" min="10" max="36" value="16">
+    </div>
+
+    <!-- Modal Section -->
+    <button id="openModalButton">Open Modal</button>
+    <div id="overlay"></div>
+    <div id="modal">
+        <p>This is a modal!</p>
+        <button id="closeModalButton">Close</button>
+    </div>
+
+    <!-- Form with Validation -->
+    <form id="form">
+        <h2>Form with Validation</h2>
+
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+        <div id="nameError" class="error"></div>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required>
+        <div id="emailError" class="error"></div>
+
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required>
+        <div id="passwordError" class="error"></div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Dropdown Menu -->
+    <div>
+        <label for="dropdown">Choose an option:</label>
+        <select id="dropdown">
+            <option value="">--Select--</option>
+            <option value="Option 1">Option 1</option>
+            <option value="Option 2">Option 2</option>
+            <option value="Option 3">Option 3</option>
+        </select>
+        <p id="dropdownMessage"></p>
+    </div>
+
+    <script>
+        // Toggle Background Color
+        const toggleButton = document.getElementById('toggleButton');
+        let isToggled = false;
+        toggleButton.onclick = () => {
+            document.body.style.backgroundColor = isToggled ? 'white' : 'lightblue';
+            isToggled = !isToggled;
+        };
+
+        // Slider Text Size Adjustment
+        const slider = document.getElementById('slider');
+        const text = document.getElementById('text');
+        slider.oninput = () => {
+            text.style.fontSize = `${slider.value}px`;
+        };
+
+        // Modal Event Handlers
+        const modal = document.getElementById('modal');
+        const overlay = document.getElementById('overlay');
+        const openModalButton = document.getElementById('openModalButton');
+        const closeModalButton = document.getElementById('closeModalButton');
+
+        openModalButton.onclick = () => {
+            modal.style.display = 'block';
+            overlay.style.display = 'block';
+        };
+
+        closeModalButton.onclick = () => {
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+        };
+
+        overlay.onclick = () => {
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+        };
+
+        // Form Validation
+        const form = document.getElementById('form');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+
+        form.onsubmit = (event) => {
+            let isValid = true;
+
+            if (nameInput.value.length < 3) {
+                nameError.textContent = 'Name must be at least 3 characters long.';
+                isValid = false;
+            } else {
+                nameError.textContent = '';
+            }
+
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailInput.value)) {
+                emailError.textContent = 'Please enter a valid email address.';
+                isValid = false;
+            } else {
+                emailError.textContent = '';
+            }
+
+            const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordPattern.test(passwordInput.value)) {
+                passwordError.textContent = 'Password must be at least 8 characters, include an uppercase letter and a number.';
+                isValid = false;
+            } else {
+                passwordError.textContent = '';
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+        };
+
+        // Dropdown Event Handler
+        const dropdown = document.getElementById('dropdown');
+        const dropdownMessage = document.getElementById('dropdownMessage');
+
+        dropdown.onchange = () => {
+            dropdownMessage.textContent = dropdown.value ? `You selected: ${dropdown.value}` : '';
+        };
+    </script>
+</body>
+</html>
